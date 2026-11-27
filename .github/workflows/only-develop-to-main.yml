@@ -1,0 +1,21 @@
+name: Only develop to main
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-source-branch:
+    name: Only develop can merge into main
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check source branch
+        env:
+          SOURCE_BRANCH: ${{ github.head_ref }}
+        run: |
+          if [ "$SOURCE_BRANCH" != "develop" ]; then
+            echo "ERROR: Only pull requests from develop can be merged into main."
+            exit 1
+          fi
+          echo "OK: Pull request from develop."
